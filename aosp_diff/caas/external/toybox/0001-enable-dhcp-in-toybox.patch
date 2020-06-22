@@ -1,0 +1,99 @@
+From ff1a73a35d0409e1f1eb24b36fcd106517058e54 Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Fri, 19 Jun 2020 10:45:14 +0800
+Subject: [PATCH] enable dhcp in toybox
+
+Tracked-On:
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+---
+ .config             | 2 +-
+ Android.bp          | 2 ++
+ generated/config.h  | 4 ++--
+ toys/pending/dhcp.c | 9 ++++++---
+ 4 files changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/.config b/.config
+index eb82ddec..c2869208 100644
+--- a/.config
++++ b/.config
+@@ -92,7 +92,7 @@ CONFIG_DEVMEM=y
+ CONFIG_DF=y
+ # CONFIG_DHCP6 is not set
+ # CONFIG_DHCPD is not set
+-# CONFIG_DHCP is not set
++CONFIG_DHCP=y
+ CONFIG_DIFF=y
+ CONFIG_DIRNAME=y
+ CONFIG_DMESG=y
+diff --git a/Android.bp b/Android.bp
+index 91da3ad3..9edc0083 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -155,6 +155,7 @@ cc_defaults {
+         "toys/other/yes.c",
+         "toys/pending/bc.c",
+         "toys/pending/dd.c",
++        "toys/pending/dhcp.c",
+         "toys/pending/diff.c",
+         "toys/pending/expr.c",
+         "toys/pending/getfattr.c",
+@@ -284,6 +285,7 @@ cc_defaults {
+                 "dd",
+                 "devmem",
+                 "df",
++                "dhcp",
+                 "diff",
+                 "dirname",
+                 "dmesg",
+diff --git a/generated/config.h b/generated/config.h
+index d018081a..7fa52d3e 100644
+--- a/generated/config.h
++++ b/generated/config.h
+@@ -158,8 +158,8 @@
+ #define USE_DHCP6(...)
+ #define CFG_DHCPD 0
+ #define USE_DHCPD(...)
+-#define CFG_DHCP 0
+-#define USE_DHCP(...)
++#define CFG_DHCP 1
++#define USE_DHCP(...) __VA_ARGS__
+ #define CFG_DIFF 1
+ #define USE_DIFF(...) __VA_ARGS__
+ #define CFG_DIRNAME 1
+diff --git a/toys/pending/dhcp.c b/toys/pending/dhcp.c
+index 2dd392dc..81d15ad0 100644
+--- a/toys/pending/dhcp.c
++++ b/toys/pending/dhcp.c
+@@ -351,7 +351,8 @@ static void write_pid(char *path)
+     char pidbuf[12];
+ 
+     sprintf(pidbuf, "%u", (unsigned)getpid());
+-    write(pidfile, pidbuf, strlen(pidbuf));
++    if (write(pidfile, pidbuf, strlen(pidbuf)))
++			;
+     close(pidfile);
+   }
+ }
+@@ -1354,7 +1355,8 @@ lease_fail:
+         }
+         if (toys.optflags & FLAG_b) {
+           infomsg(infomode, "Lease failed. Going Daemon mode");
+-          daemon(0, 0);
++          if (daemon(0, 0))
++				  ;
+           if (toys.optflags & FLAG_p) write_pid(TT.pidfile);
+           toys.optflags &= ~FLAG_b;
+           toys.optflags |= FLAG_f;
+@@ -1491,7 +1493,8 @@ renew_requested:
+           }
+           toys.optflags &= ~FLAG_n;
+           if (!(toys.optflags & FLAG_f)) {
+-            daemon(0, 0);
++            if (daemon(0, 0))
++					;
+             toys.optflags |= FLAG_f;
+             if (toys.optflags & FLAG_p) write_pid(TT.pidfile);
+           }
+-- 
+2.20.1
+
