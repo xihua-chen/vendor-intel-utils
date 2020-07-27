@@ -1,0 +1,56 @@
+From 0f6711bca5b2ee0ef1b6aed6803c257f43d3b44c Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Tue, 28 Jul 2020 11:06:54 +0800
+Subject: [PATCH] bypass uevent on HyperV
+
+Change-Id: Ia93907e676f324ee8fd8adc92a3aac1e51c0d91b
+Tracked-On:
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+---
+ init/Android.bp  | 2 +-
+ init/devices.cpp | 9 ++++-----
+ 2 files changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/init/Android.bp b/init/Android.bp
+index 6be7290e3..2deeb4421 100644
+--- a/init/Android.bp
++++ b/init/Android.bp
+@@ -27,7 +27,7 @@ cc_defaults {
+         "-Wno-unused-parameter",
+         "-Werror",
+         "-DALLOW_LOCAL_PROP_OVERRIDE=0",
+-        "-DALLOW_PERMISSIVE_SELINUX=0",
++        "-DALLOW_PERMISSIVE_SELINUX=1",
+         "-DREBOOT_BOOTLOADER_ON_PANIC=0",
+         "-DWORLD_WRITABLE_KMSG=0",
+         "-DDUMP_ON_UMOUNT_FAILURE=0",
+diff --git a/init/devices.cpp b/init/devices.cpp
+index 370e53cde..429bc4ff1 100644
+--- a/init/devices.cpp
++++ b/init/devices.cpp
+@@ -349,7 +349,7 @@ std::vector<std::string> DeviceHandler::GetBlockDeviceSymlinks(const Uevent& uev
+     } else if (FindDmDevicePartition(uevent.path, &partition)) {
+         return {"/dev/block/mapper/" + partition};
+     } else {
+-        return {};
++        //return {};
+     }
+ 
+     std::vector<std::string> links;
+@@ -376,10 +376,9 @@ std::vector<std::string> DeviceHandler::GetBlockDeviceSymlinks(const Uevent& uev
+         // symlink of /dev/block/by-name/<device_name> for symmetry.
+         links.emplace_back("/dev/block/by-name/" + uevent.device_name);
+     }
+-
+-    auto last_slash = uevent.path.rfind('/');
+-    links.emplace_back(link_path + "/" + uevent.path.substr(last_slash + 1));
+-
++    //auto last_slash = uevent.path.rfind('/');
++    //links.emplace_back(link_path + "/" + uevent.path.substr(last_slash + 1));
++    links.emplace_back(uevent.path);
+     return links;
+ }
+ 
+-- 
+2.20.1
+

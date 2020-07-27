@@ -1,0 +1,49 @@
+From c10f125c6585c5da632597c135e2f33213352450 Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Thu, 30 Jul 2020 09:29:11 +0800
+Subject: [PATCH] WR for HyperV
+
+Change-Id: I1d92f63f91d3153863acda2b93cf5827d1bbe315
+Tracked-On:
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+---
+ .../java/com/android/server/PersistentDataBlockService.java  | 5 +++++
+ .../android/server/testharness/TestHarnessModeService.java   | 4 ++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/PersistentDataBlockService.java b/services/core/java/com/android/server/PersistentDataBlockService.java
+index bd5ad960a88..b8695fa6af8 100644
+--- a/services/core/java/com/android/server/PersistentDataBlockService.java
++++ b/services/core/java/com/android/server/PersistentDataBlockService.java
+@@ -355,6 +355,11 @@ public class PersistentDataBlockService extends SystemService {
+ 
+     private void formatPartitionLocked(boolean setOemUnlockEnabled) {
+         DataOutputStream outputStream;
++        if (setOemUnlockEnabled)
++           return;
++
++        if (!setOemUnlockEnabled)
++           return;
+         try {
+             outputStream = new DataOutputStream(new FileOutputStream(new File(mDataBlockFile)));
+         } catch (FileNotFoundException e) {
+diff --git a/services/core/java/com/android/server/testharness/TestHarnessModeService.java b/services/core/java/com/android/server/testharness/TestHarnessModeService.java
+index fcf87ee2a4b..83d4f07f9c4 100644
+--- a/services/core/java/com/android/server/testharness/TestHarnessModeService.java
++++ b/services/core/java/com/android/server/testharness/TestHarnessModeService.java
+@@ -87,10 +87,10 @@ public class TestHarnessModeService extends SystemService {
+     public void onBootPhase(int phase) {
+         switch (phase) {
+             case PHASE_SYSTEM_SERVICES_READY:
+-                setUpTestHarnessMode();
++                //setUpTestHarnessMode();
+                 break;
+             case PHASE_BOOT_COMPLETED:
+-                completeTestHarnessModeSetup();
++                //completeTestHarnessModeSetup();
+                 showNotificationIfEnabled();
+                 break;
+         }
+-- 
+2.20.1
+
