@@ -1,0 +1,33 @@
+From d67dbe069c2777c321019cb2d9e3ae639f821ed3 Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Fri, 18 Sep 2020 13:36:06 +0800
+Subject: [PATCH] [PATCH] WR for HyperV
+
+Change-Id: Ic6b784e61a66fceded94015c7b2b9ad7aa52f9a5
+Tracked-On:
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+Signed-off-by: JianFeng,Zhou <jianfeng.zhou@intel.com>
+---
+ .../android/server/testharness/TestHarnessModeService.java    | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/services/core/java/com/android/server/testharness/TestHarnessModeService.java b/services/core/java/com/android/server/testharness/TestHarnessModeService.java
+index 531136976c8..2e496a71f0d 100644
+--- a/services/core/java/com/android/server/testharness/TestHarnessModeService.java
++++ b/services/core/java/com/android/server/testharness/TestHarnessModeService.java
+@@ -88,10 +88,10 @@ public class TestHarnessModeService extends SystemService {
+     public void onBootPhase(int phase) {
+         switch (phase) {
+             case PHASE_SYSTEM_SERVICES_READY:
+-                setUpTestHarnessMode();
++                //setUpTestHarnessMode();
+                 break;
+             case PHASE_BOOT_COMPLETED:
+-                completeTestHarnessModeSetup();
++                //completeTestHarnessModeSetup();
+                 showNotificationIfEnabled();
+                 break;
+         }
+-- 
+2.20.1
+

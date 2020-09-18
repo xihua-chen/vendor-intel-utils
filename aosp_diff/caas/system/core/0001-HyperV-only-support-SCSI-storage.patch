@@ -1,0 +1,31 @@
+From 1fa4d0d196eba3cd24e46036951afeb15d6dbb6a Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Fri, 18 Sep 2020 13:21:54 +0800
+Subject: [PATCH] HyperV only support SCSI storage.
+
+To run on HyperV, SCSI storage must be supported.
+
+Change-Id: Ifd9c4aff80f09a3ced16064d69fcba6765c34177
+Tracked-On:
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+Signed-off-by: JianFeng,Zhou <jianfeng.zhou@intel.com>
+---
+ init/devices.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/init/devices.cpp b/init/devices.cpp
+index 9fbec641b..cf3723890 100644
+--- a/init/devices.cpp
++++ b/init/devices.cpp
+@@ -340,6 +340,8 @@ std::vector<std::string> DeviceHandler::GetBlockDeviceSymlinks(const Uevent& uev
+             symlinks.emplace_back("/dev/block/mapper/by-uuid/" + uuid);
+         }
+         return symlinks;
++    } else if (StartsWith(uevent.path, "/devices/virtual/block") || StartsWith(uevent.path, "/devices/LNXSYSTM")) {
++        // fall through to support other storage such as SCSI storage
+     } else {
+         return {};
+     }
+-- 
+2.20.1
+
