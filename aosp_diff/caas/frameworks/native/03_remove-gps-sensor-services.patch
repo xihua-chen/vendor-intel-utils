@@ -1,0 +1,30 @@
+From 64d94a47e15c6fdf81469797bf9a199686f2963f Mon Sep 17 00:00:00 2001
+From: Xihua Chen <xihua.chen@intel.com>
+Date: Thu, 24 Dec 2020 11:14:18 +0800
+Subject: [PATCH] remove gps/sensor services
+
+Signed-off-by: Xihua Chen <xihua.chen@intel.com>
+
+Change-Id: Id264153ef48b70b170888f32f1cc146a3b464136
+---
+ data/etc/tablet_core_hardware.xml | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/data/etc/tablet_core_hardware.xml b/data/etc/tablet_core_hardware.xml
+index 52524ca95..e6c44a3e0 100644
+--- a/data/etc/tablet_core_hardware.xml
++++ b/data/etc/tablet_core_hardware.xml
+@@ -27,10 +27,6 @@
+     <feature name="android.software.cts" />
+ 
+     <feature name="android.hardware.audio.output" />
+-    <feature name="android.hardware.location" />
+-    <feature name="android.hardware.location.network" />
+-    <feature name="android.hardware.sensor.compass" />
+-    <feature name="android.hardware.sensor.accelerometer" />
+     <feature name="android.hardware.bluetooth" />
+     <feature name="android.hardware.touchscreen" />
+     <feature name="android.hardware.touchscreen.multitouch" />
+-- 
+2.20.1
+
